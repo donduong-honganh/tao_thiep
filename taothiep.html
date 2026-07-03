@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tạo Thiệp Cưới Đơn Dương & Hồng Ánh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- HỆ THỐNG BIẾN ĐỒNG BỘ VỚI THIỆP CƯỚI --- */
+        :root {
+            --bg-color: #f8f5f2;
+            --primary: #4a3538;
+            --accent: #c69f74;
+            --text-dark: #333;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .dashboard {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            width: 100%;
+            max-width: 500px;
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 40px rgba(74, 53, 56, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header h1 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        /* --- KIẾN TRÚC LƯỚI CHỌN ĐỐI TƯỢNG (LUXURY SELECTOR) --- */
+        .selector-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .selector-group input[type="radio"] {
+            display: none;
+        }
+
+        .selector-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 5px;
+            background: transparent;
+            border: 1px solid rgba(198, 159, 116, 0.4);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
+
+        .selector-group input[type="radio"]:checked+.selector-label {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 8px 15px rgba(74, 53, 56, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* --- KHỐI HIỂN THỊ LINK GỐC (THÊM MỚI) --- */
+        .base-link-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(198, 159, 116, 0.08);
+            /* Nền vàng nhạt trong suốt */
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-top: -1rem;
+            /* Kéo sát lên cụm chọn thẻ */
+            margin-bottom: 2.5rem;
+            border: 1px dashed rgba(198, 159, 116, 0.4);
+        }
+
+        .base-link-text {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-right: 15px;
+            opacity: 0.8;
+        }
+
+        .btn-copy-base {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-copy-base:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-copy-base.success {
+            background: #4CAF50;
+            color: #fff;
+            border-color: #4CAF50;
+        }
+
+        /* --- FORM NHẬP LIỆU VÀ NÚT BẤM --- */
+        .input-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .main-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            color: var(--primary);
+            transition: border-color 0.3s ease;
+        }
+
+        .main-input:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-generate {
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        .btn-generate:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        /* --- BẢNG KẾT QUẢ --- */
+        .result-panel {
+            margin-top: 2rem;
+            background: #ffffff;
+            border: 1px dashed var(--accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            display: none;
+            /* Giấu mặc định */
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #777;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-link {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--primary);
+            word-break: break-all;
+            background: #f4f4f4;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .btn-copy {
+            width: 100%;
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-copy:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-copy.success {
+            background: #4CAF50;
+            color: #fff;
+            border-color: #4CAF50;
+        }
+
+        /* =========================================
+           TỐI ƯU HÓA TRẢI NGHIỆM ĐIỆN THOẠI (MOBILE RESPONSIVE)
+        ========================================= */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+                /* Giảm lề ngoài để tăng không gian bên trong */
+            }
+
+            .dashboard {
+                padding: 1.5rem 1rem;
+                /* Thu hẹp lề trong của hộp điều khiển */
+            }
+
+            .header h1 {
+                font-size: 1.1rem;
+            }
+
+            /* Cứu vãn 3 nút chọn thẻ không bị bóp nghẹt */
+            .selector-group {
+                gap: 5px;
+                /* Ép sát 3 nút lại với nhau */
+            }
+
+            .selector-label {
+                padding: 12px 2px;
+                font-size: 0.65rem;
+                /* Thu nhỏ chữ để vừa vặn 1 dòng */
+                letter-spacing: 0px;
+                /* Bỏ giãn chữ trên mobile để tiết kiệm diện tích */
+            }
+
+            /* Cứu vãn thanh Copy Link Gốc */
+            .base-link-wrapper {
+                padding: 8px 10px;
+            }
+
+            .base-link-text {
+                font-size: 0.65rem;
+                /* Thu nhỏ link */
+                flex: 1;
+                /* Ép chiếm hết không gian còn lại */
+                min-width: 0;
+                /* LỆNH SỐNG CÒN: Ép Flexbox cho phép cắt chữ bằng dấu ba chấm (...) thay vì đẩy văng nút ra ngoài */
+            }
+
+            .btn-copy-base {
+                padding: 6px 10px;
+                font-size: 0.55rem;
+                flex-shrink: 0;
+                /* LỆNH SỐNG CÒN: Tuyệt đối không được bóp méo hình dáng của nút Copy dù link có dài đến đâu */
+            }
+
+            /* Tối ưu ô nhập tên và nút bấm chính */
+            .main-input {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .btn-generate {
+                padding: 14px;
+                font-size: 0.85rem;
+            }
+
+            /* Tối ưu bảng kết quả cuối cùng */
+            .result-link {
+                font-size: 0.75rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard">
+        <div class="header">
+            <h1>Tạo thiệp hôn lễ của<br>Đơn Dương & Hồng Ánh</h1>
+            <p>Hệ thống tự động mã hóa và tạo thư mời cá nhân hóa cho khách mời.</p>
+        </div>
+
+        <div class="input-label">1. CHỌN LOẠI THIỆP</div>
+        <div class="selector-group">
+            <label>
+                <input type="radio" name="linkType" value="https://donduong-honganh.github.io/" checked>
+                <div class="selector-label">Thiệp<br>Chung</div>
+            </label>
+            <label>
+                <input type="radio" name="linkType" value="https://donduong-honganh.github.io/nha_trai/">
+                <div class="selector-label">Thiệp<br>Nhà Trai</div>
+            </label>
+            <label>
+                <input type="radio" name="linkType" value="https://donduong-honganh.github.io/nha_gai/">
+                <div class="selector-label">Thiệp<br>Nhà Gái</div>
+            </label>
+        </div>
+
+        <div class="base-link-wrapper">
+            <span id="baseLinkDisplay" class="base-link-text">https://donduong-honganh.github.io/</span>
+            <button id="btnCopyBase" class="btn-copy-base" onclick="copyBaseLink()">Copy Link Gốc</button>
+        </div>
+
+        <div class="input-group">
+            <div class="input-label">2. NHẬP QUÝ DANH KHÁCH MỜI</div>
+            <input type="text" id="guestName" class="main-input" placeholder="VD: Anh Hoàng Phong, Gia đình Chú Ba..."
+                autocomplete="off">
+        </div>
+
+        <button class="btn-generate" onclick="generateVIPLink()">Tạo Thiếp Mời</button>
+
+        <div id="resultPanel" class="result-panel">
+            <div class="result-title">Liên kết dành riêng cho: <span id="displayTargetName"
+                    style="color: var(--primary); font-weight: bold;"></span></div>
+            <div id="outputLink" class="result-link"></div>
+            <button id="copyBtn" class="btn-copy" onclick="copyToClipboard()">Sao Chép Bảng Tạm</button>
+        </div>
+    </div>
+
+    <script>
+        // --- LOGIC: CẬP NHẬT VÀ COPY LINK GỐC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const radios = document.querySelectorAll('input[name="linkType"]');
+            const baseLinkDisplay = document.getElementById('baseLinkDisplay');
+            const btnCopyBase = document.getElementById('btnCopyBase');
+
+            // Lắng nghe: Khi người dùng bấm chuyển Tab, lập tức đổi Link gốc hiển thị
+            radios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    baseLinkDisplay.innerText = this.value;
+                    // Reset lại nút copy gốc
+                    btnCopyBase.innerText = "Copy Link Gốc";
+                    btnCopyBase.classList.remove('success');
+                });
+            });
+        });
+
+        // Hàm thực thi việc chép Link gốc vào bộ nhớ tạm
+        function copyBaseLink() {
+            const currentBaseLink = document.querySelector('input[name="linkType"]:checked').value;
+            const btnCopyBase = document.getElementById('btnCopyBase');
+
+            navigator.clipboard.writeText(currentBaseLink).then(() => {
+                btnCopyBase.innerText = "Đã Copy ✓";
+                btnCopyBase.classList.add('success');
+
+                // Mẹo UX: Tự động trả về trạng thái cũ sau 2 giây để mắt không bị vướng
+                setTimeout(() => {
+                    btnCopyBase.innerText = "Copy Link Gốc";
+                    btnCopyBase.classList.remove('success');
+                }, 2000);
+            }).catch(err => {
+                alert('Không thể sao chép. Vui lòng copy thủ công!');
+            });
+        }
+        let currentGeneratedLink = "";
+
+        function generateVIPLink() {
+            // 1. Lấy dữ liệu
+            const nameInput = document.getElementById('guestName');
+            const name = nameInput.value.trim();
+            const selectedDomain = document.querySelector('input[name="linkType"]:checked').value;
+
+            // 2. Kiểm duyệt đầu vào: Bắt lỗi nếu quên nhập tên
+            if (!name) {
+                alert('Vui lòng nhập tên khách mời trước khi tạo link!');
+                nameInput.focus();
+                return;
+            }
+
+            // 3. Mã hóa tên (Base64 chuẩn hóa Tiếng Việt)
+            const token = btoa(unescape(encodeURIComponent(name)));
+
+            // 4. Lắp ráp liên kết. Đảm bảo xử lý đúng dấu gạch chéo cuối URL (/)
+            currentGeneratedLink = `${selectedDomain}?vip=${token}`;
+
+            // 5. Hiển thị kết quả ra giao diện
+            document.getElementById('displayTargetName').innerText = name;
+            document.getElementById('outputLink').innerText = currentGeneratedLink;
+            document.getElementById('resultPanel').style.display = 'block';
+
+            // Reset nút copy về trạng thái ban đầu
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.innerText = "Sao Chép Bảng Tạm";
+            copyBtn.classList.remove('success');
+
+            // Mẹo UX: Cuộn xuống cuối để thấy kết quả trên điện thoại
+            setTimeout(() => {
+                document.getElementById('resultPanel').scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        }
+
+        function copyToClipboard() {
+            if (!currentGeneratedLink) return;
+
+            // Sử dụng API Clipboard hiện đại của trình duyệt
+            navigator.clipboard.writeText(currentGeneratedLink).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
+                copyBtn.innerText = "Đã Sao Chép Thành Công ✓";
+                copyBtn.classList.add('success');
+
+                // Mẹo UX: Tự động bôi đen (chọn) tên trong ô input để người dùng dễ dàng gõ đè tên người tiếp theo
+                document.getElementById('guestName').select();
+            }).catch(err => {
+                alert('Trình duyệt không hỗ trợ copy tự động. Vui lòng copy thủ công dòng link bên trên.');
+            });
+        }
+
+        // Mẹo UX: Hỗ trợ ấn Enter tại ô nhập tên để tạo link ngay
+        document.getElementById('guestName').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                generateVIPLink();
+            }
+        });
+    </script>
+</body>
+
+</html>
