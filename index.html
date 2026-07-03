@@ -383,8 +383,8 @@
 
         <div class="input-group">
             <div class="input-label">2. NHẬP QUÝ DANH KHÁCH MỜI</div>
-            <input type="text" id="guestName" class="main-input" placeholder="VD: Anh Hoàng Phong, Gia đình Chú Ba..."
-                autocomplete="off">
+            <input type="text" id="guestName" class="main-input" placeholder="VD: Anh Hoàng Phong, Gia đình Chú Bác..."
+                autocomplete="off" maxlength="35">
         </div>
 
         <button class="btn-generate" onclick="generateVIPLink()">Tạo Thiếp Mời</button>
@@ -451,8 +451,8 @@
             // 3. Mã hóa tên (Base64 chuẩn hóa Tiếng Việt)
             const token = btoa(unescape(encodeURIComponent(name)));
 
-            // 4. Lắp ráp liên kết. Đảm bảo xử lý đúng dấu gạch chéo cuối URL (/)
-            currentGeneratedLink = `${selectedDomain}?vip=${token}`;
+            // 4. Lắp ráp liên kết. Bọc áo giáp encodeURIComponent để bảo vệ các dấu +, /, = không bị biến dạng trên URL
+            currentGeneratedLink = `${selectedDomain}?vip=${encodeURIComponent(token)}`;
 
             // 5. Hiển thị kết quả ra giao diện
             document.getElementById('displayTargetName').innerText = name;
