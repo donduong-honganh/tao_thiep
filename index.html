@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tạo Thiệp Cưới Đơn Dương & Hồng Ánh</title>
+    <title>Tạo Thiệp Mời</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         /* --- HỆ THỐNG BIẾN ĐỒNG BỘ VỚI THIỆP CƯỚI --- */
         :root {
-            --bg-color: #f8f5f2;
-            --primary: #4a3538;
-            --accent: #c69f74;
+            --bg-color: #f2f6f8;
+            --primary: #435b7e;
+            --accent: #2c3743;
             --text-dark: #333;
             --glass-bg: rgba(255, 255, 255, 0.85);
             --radius: 16px;
@@ -356,7 +356,7 @@
 
     <div class="dashboard">
         <div class="header">
-            <h1>Tạo thiệp hôn lễ của<br>Đơn Dương & Hồng Ánh</h1>
+            <h1>Tạo thiệp mời<br>Đơn Dương & Hồng Ánh</h1>
             <p>Hệ thống tự động mã hóa và tạo thư mời cá nhân hóa cho khách mời.</p>
         </div>
 
@@ -383,7 +383,7 @@
 
         <div class="input-group">
             <div class="input-label">2. NHẬP QUÝ DANH KHÁCH MỜI</div>
-            <input type="text" id="guestName" class="main-input" placeholder="VD: Anh Hoàng Phong, Gia đình Chú Bác..."
+            <input type="text" id="guestName" class="main-input" placeholder="VD: Anh ABC, Gia đình Chú Bác..."
                 autocomplete="off" maxlength="35">
         </div>
 
@@ -448,8 +448,10 @@
                 return;
             }
 
-            // 3. Mã hóa tên (Base64 chuẩn hóa Tiếng Việt)
-            const token = btoa(unescape(encodeURIComponent(name)));
+            // 3. Mã hóa tên (Cảnh giới Bất tử - Nhai nghiến mọi ký tự tiếng Việt & Emoji)
+            const bytes = new TextEncoder().encode(name);
+            const binString = Array.from(bytes, byte => String.fromCharCode(byte)).join('');
+            const token = btoa(binString);
 
             // 4. Lắp ráp liên kết. Bọc áo giáp encodeURIComponent để bảo vệ các dấu +, /, = không bị biến dạng trên URL
             currentGeneratedLink = `${selectedDomain}?vip=${encodeURIComponent(token)}`;
